@@ -17,7 +17,11 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	mux.Handle("/home", i.Middleware(homeHandler(i)))
+	mux.Handle("GET /login", i.Middleware(loginGetHandler(i)))
+	mux.Handle("POST /login", i.Middleware(loginPostHandler(i)))
+	mux.Handle("DELETE /logout", i.Middleware(logoutDeleteHandler(i)))
+	mux.Handle("GET /organizations", i.Middleware(organizationsGetHandler(i)))
+	mux.Handle("/", i.Middleware(dashboardHandler(i)))
 	mux.Handle("/build/", http.StripPrefix("/build/", http.FileServer(http.Dir("./public/build"))))
 
 	http.ListenAndServe(":3000", mux)
@@ -112,10 +116,77 @@ func vite(manifestPath, buildDir string) func(path string) (string, error) {
 	}
 }
 
-func homeHandler(i *inertia.Inertia) http.Handler {
+func loginGetHandler(i *inertia.Inertia) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
-		err := i.Render(w, r, "Home/Index", inertia.Props{
-			"text": "Inertia.js with Vue.js and Go! 💙",
+		err := i.Render(w, r, "Auth/Login", nil)
+		if err != nil {
+			handleServerErr(w, err)
+			return
+		}
+	}
+
+	return http.HandlerFunc(fn)
+}
+
+func loginPostHandler(i *inertia.Inertia) http.Handler {
+	fn := func(w http.ResponseWriter, r *http.Request) {
+		i.Redirect(w, r, "/")
+	}
+
+	return http.HandlerFunc(fn)
+}
+
+func logoutDeleteHandler(i *inertia.Inertia) http.Handler {
+	fn := func(w http.ResponseWriter, r *http.Request) {
+		i.Redirect(w, r, "/login")
+	}
+
+	return http.HandlerFunc(fn)
+}
+
+func dashboardHandler(i *inertia.Inertia) http.Handler {
+	fn := func(w http.ResponseWriter, r *http.Request) {
+		i.ShareProp("auth", map[string]interface{}{
+			"user": map[string]interface{}{
+				"first_name": "John",
+				"last_name":  "Doe",
+				"account": map[string]interface{}{
+					"name": "Acme Corporation",
+				},
+			},
+		})
+		err := i.Render(w, r, "Dashboard/Index", nil)
+		if err != nil {
+			handleServerErr(w, err)
+			return
+		}
+	}
+
+	return http.HandlerFunc(fn)
+}
+
+func organizationsGetHandler(i *inertia.Inertia) http.Handler {
+	fn := func(w http.ResponseWriter, r *http.Request) {
+		i.ShareProp("auth", map[string]interface{}{
+			"user": map[string]interface{}{
+				"first_name": "John",
+				"last_name":  "Doe",
+				"account": map[string]interface{}{
+					"name": "Acme Corporation",
+				},
+			},
+		})
+		i.ShareProp("flash", map[string]interface{}{
+			"error": nil,
+		})
+
+		err := i.Render(w, r, "Organizations/Index", inertia.Props{
+			"organizations": map[string]interface{}{
+				"data": []map[string]interface{}{},
+			},
+			"filters": map[string]interface{}{
+				"search": nil,
+			},
 		})
 		if err != nil {
 			handleServerErr(w, err)
