@@ -1,11 +1,16 @@
-# Gonertia Vue Example
+# PingCRM Go Inertia
 
-This is a template for start using the [Golang Inertia Adapter](https://github.com/romsar/gonertia) using Vue 3
+This app is a demo app built using:
 
-Other template: [Svelte Example w/ Gonertia](https://github.com/henrriusdev/gonertia_svelte_example)
+- Goinertia
+- Vue
+- `net/http` server
+- XXX ORM
 
-## How to contribute
+## Code structure
 
-- Create a local branch or fork
-- Upload the changes
-- Make PR (understandable)
+Request -> Handler -> Service -> Model
+
+## TODO
+
+- Migrate to use code gen ORM eg. sqlboiler, sqlc, gorm gen
