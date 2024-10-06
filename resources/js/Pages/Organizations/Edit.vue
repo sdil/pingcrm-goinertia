@@ -60,9 +60,9 @@
             </Link>
           </td>
         </tr>
-        <tr v-if="organization.contacts.length === 0">
+        <!-- <tr v-if="organization.contacts.length === 0">
           <td class="px-6 py-4 border-t" colspan="4">No contacts found.</td>
-        </tr>
+        </tr> -->
       </table>
     </div>
   </div>
@@ -108,16 +108,16 @@ export default {
   },
   methods: {
     update() {
-      this.form.put(`/organizations/${this.organization.id}`)
+      this.form.put(`/organizations/${this.organization.ID}`)
     },
     destroy() {
       if (confirm('Are you sure you want to delete this organization?')) {
-        this.$inertia.delete(`/organizations/${this.organization.id}`)
+        this.$inertia.delete(`/organizations/${this.organization.ID}`)
       }
     },
     restore() {
       if (confirm('Are you sure you want to restore this organization?')) {
-        this.$inertia.put(`/organizations/${this.organization.id}/restore`)
+        this.$inertia.put(`/organizations/${this.organization.ID}/restore`)
       }
     },
   },

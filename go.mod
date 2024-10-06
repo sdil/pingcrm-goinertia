@@ -1,4 +1,4 @@
-module vuego
+module pingcrm
 
 go 1.23
 

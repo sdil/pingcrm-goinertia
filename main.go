@@ -5,8 +5,7 @@ import (
 
 	"os"
 	"os/signal"
-	"vuego/pkg/inertia"
-	"vuego/pkg/server"
+	"pingcrm/pkg/server"
 
 	"log"
 )
@@ -20,8 +19,7 @@ func main() {
 
 	// Start the server
 	go func() {
-		i := inertia.InitInertia()
-		routes := server.SetupRoutes(i, c)
+		routes := server.SetupRoutes(c)
 		http.ListenAndServe("localhost:3000", routes)
 	}()
 

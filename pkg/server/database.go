@@ -1,7 +1,7 @@
 package server
 
 import (
-	"vuego/organizations"
+	"pingcrm/organizations"
 
 	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
