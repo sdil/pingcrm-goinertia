@@ -2,29 +2,12 @@ package server
 
 import (
 	"net/http"
-	inertiaInternal "pingcrm/pkg/inertia"
-
-	inertia "github.com/romsar/gonertia"
+	inertia "pingcrm/pkg/inertia"
 )
-
-func sharedPropMiddleware(next http.Handler, i *inertia.Inertia) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		i.ShareProp("auth", map[string]interface{}{
-			"user": map[string]interface{}{
-				"first_name": "John",
-				"last_name":  "Doe",
-				"account": map[string]interface{}{
-					"name": "Acme Corporation",
-				},
-			},
-		})
-		next.ServeHTTP(w, r)
-	})
-}
 
 // Accept other services as argument
 func SetupRoutes(c *Container) *http.ServeMux {
-	i := inertiaInternal.InitInertia()
+	i := inertia.InitInertia()
 
 	mux := http.NewServeMux()
 
