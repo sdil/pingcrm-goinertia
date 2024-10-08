@@ -11,6 +11,7 @@ func SetupRoutes(c *Container) *http.ServeMux {
 
 	mux := http.NewServeMux()
 
+	// Dashboard
 	mux.Handle("/", i.Middleware(sharedPropMiddleware(DashboardHandler(i), i)))
 
 	// Auth

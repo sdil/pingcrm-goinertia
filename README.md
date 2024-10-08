@@ -5,7 +5,7 @@ This app is a demo app built using:
 - Goinertia
 - Vue
 - `net/http` server
-- XXX ORM
+- sqlboiler ORM
 
 ## Code structure
 
