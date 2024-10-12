@@ -13,9 +13,14 @@ type OrganizationsHandler struct {
 	DB *gorm.DB
 }
 
-func (h *OrganizationsHandler) Init(c *Container) {
+func newOrganizationsHandler(c *Container) *OrganizationsHandler {
+	h := &OrganizationsHandler{
+		DB: c.DB,
+	}
 	h.DB = c.DB
+
 	println("OrganizationsHandler initialized")
+	return h
 }
 
 func DashboardHandler(i *inertia.Inertia) http.Handler {

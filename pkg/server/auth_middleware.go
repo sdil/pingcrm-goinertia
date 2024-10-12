@@ -20,9 +20,17 @@ type AuthProp struct {
 	User UserProp `json:"user"`
 }
 
-func sharedPropMiddleware(next http.Handler, i *inertia.Inertia) http.Handler {
+type AuthMiddleware struct {
+	i *inertia.Inertia
+}
+
+func NewAuthMiddleware(i *inertia.Inertia) *AuthMiddleware {
+	return &AuthMiddleware{i}
+}
+
+func (am AuthMiddleware) sharedPropMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		i.ShareProp("auth", AuthProp{
+		am.i.ShareProp("auth", AuthProp{
 				User: UserProp{
 					FirstName: "John",
 					LastName:  "Doe",
