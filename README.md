@@ -9,8 +9,6 @@ This app is a demo app built using:
 
 ## Code structure
 
-Request -> Handler -> Service -> Model
-
-## TODO
-
-- Migrate to use code gen ORM eg. sqlboiler, sqlc, gorm gen
+```mermaid
+Request -> Handler -> Service --sqlboiler--> Database
+```

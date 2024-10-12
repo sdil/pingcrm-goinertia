@@ -26,11 +26,11 @@ func SetupRoutes(c *Container) *http.ServeMux {
 	mux.Handle("DELETE /logout", im.Then(LogoutDeleteHandler(i)))
 
 	// Organizations
-	oh := newOrganizationsHandler(c)
-	mux.Handle("GET /organizations", ima.Then(oh.GetHandler(i)))
-	mux.Handle("GET /organizations/create", ima.Then(oh.CreateGetHandler(i)))
-	mux.Handle("GET /organizations/{id}/edit", ima.Then(oh.EditGetHandler(i)))
-	mux.Handle("POST /organizations", ima.Then(oh.CreatePostHandler(i)))
+	oh := newOrganizationsHandler(c, i)
+	mux.Handle("GET /organizations", ima.Then(http.HandlerFunc(oh.GetHandler)))
+	mux.Handle("GET /organizations/create", ima.Then(http.HandlerFunc(oh.CreateGetHandler)))
+	mux.Handle("GET /organizations/{id}/edit", ima.Then(http.HandlerFunc(oh.EditGetHandler)))
+	mux.Handle("POST /organizations", ima.Then(http.HandlerFunc(oh.CreatePostHandler)))
 
 	// Static files
 	mux.Handle("/build/", http.StripPrefix("/build/", http.FileServer(http.Dir("./public/build"))))
