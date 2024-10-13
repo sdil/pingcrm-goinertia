@@ -14,8 +14,10 @@ func SetupRoutes(c *Container) *http.ServeMux {
 
 	mux := http.NewServeMux()
 
+	// Inertia Middleware
 	im := alice.New(i.Middleware)
-	ima := alice.New(i.Middleware, am.sharedPropMiddleware)
+	// Inertia Auth Middleware
+	ima := im.Append(am.sharedPropMiddleware)
 
 	// Dashboard
 	mux.Handle("/", im.Then(DashboardHandler(i)))
@@ -27,10 +29,10 @@ func SetupRoutes(c *Container) *http.ServeMux {
 
 	// Organizations
 	oh := newOrganizationsHandler(c, i)
-	mux.Handle("GET /organizations", ima.Then(http.HandlerFunc(oh.GetHandler)))
-	mux.Handle("GET /organizations/create", ima.Then(http.HandlerFunc(oh.CreateGetHandler)))
-	mux.Handle("GET /organizations/{id}/edit", ima.Then(http.HandlerFunc(oh.EditGetHandler)))
-	mux.Handle("POST /organizations", ima.Then(http.HandlerFunc(oh.CreatePostHandler)))
+	mux.Handle("GET /organizations", ima.ThenFunc(oh.GetHandler))
+	mux.Handle("GET /organizations/create", ima.ThenFunc(oh.CreateGetHandler))
+	mux.Handle("GET /organizations/{id}/edit", ima.ThenFunc(oh.EditGetHandler))
+	mux.Handle("POST /organizations", ima.ThenFunc(oh.CreatePostHandler))
 
 	// Static files
 	mux.Handle("/build/", http.StripPrefix("/build/", http.FileServer(http.Dir("./public/build"))))
