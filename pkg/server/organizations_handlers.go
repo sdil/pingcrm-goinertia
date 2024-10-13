@@ -3,14 +3,16 @@ package server
 import (
 	"encoding/json"
 	"net/http"
+	"pingcrm/models"
 	"pingcrm/organizations"
 
+	"database/sql"
+
 	inertia "github.com/romsar/gonertia"
-	"gorm.io/gorm"
 )
 
 type OrganizationsHandler struct {
-	DB *gorm.DB
+	DB *sql.DB
 	i  *inertia.Inertia
 }
 
@@ -20,8 +22,6 @@ func newOrganizationsHandler(c *Container, i *inertia.Inertia) *OrganizationsHan
 		i:  i,
 	}
 	h.DB = c.DB
-
-	println("OrganizationsHandler initialized")
 	return h
 }
 
@@ -30,6 +30,10 @@ func (h *OrganizationsHandler) GetHandler(w http.ResponseWriter, r *http.Request
 	if err != nil {
 		handleServerErr(w, err)
 		return
+	}
+
+	if organizations == nil {
+		organizations = models.OrganizationSlice{}
 	}
 
 	err = h.i.Render(w, r, "Organizations/Index", inertia.Props{
@@ -74,7 +78,8 @@ func (h *OrganizationsHandler) EditGetHandler(w http.ResponseWriter, r *http.Req
 }
 
 func (h *OrganizationsHandler) CreatePostHandler(w http.ResponseWriter, r *http.Request) {
-	var req organizations.Organization
+	var req models.Organization
+
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		handleServerErr(w, err)

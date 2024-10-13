@@ -1,11 +1,11 @@
 package server
 
 import (
-	"gorm.io/gorm"
+	"database/sql"
 )
 
 type Container struct {
-	DB *gorm.DB
+	DB *sql.DB
 }
 
 func NewContainer() *Container {
@@ -19,9 +19,8 @@ func (c *Container) initDB() {
 }
 
 func (c *Container) Shutdown() error {
-	// FIX ME: This is not the correct way to close the database connection
-	a, _ := c.DB.DB()
-	if err := a.Close(); err != nil {
+	err := c.DB.Close()
+	if err != nil {
 		return err
 	}
 

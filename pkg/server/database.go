@@ -1,19 +1,15 @@
 package server
 
 import (
-	"pingcrm/organizations"
-
-	"github.com/glebarez/sqlite"
-	"gorm.io/gorm"
+	_ "github.com/mattn/go-sqlite3"
+	"database/sql"
 )
   
-func ConnectDb() *gorm.DB {
-	db, err := gorm.Open(sqlite.Open("gorm.db"), &gorm.Config{})
+func ConnectDb() *sql.DB {
+	db, err := sql.Open("sqlite3", "pingcrm.db")
 	if err != nil {
 		panic("failed to connect database")
 	}
-
-	db.AutoMigrate(&organizations.Organization{})
 
 	return db
 }

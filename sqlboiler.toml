@@ -1,0 +1,5 @@
+wipe = true
+no-tests = true
+
+[sqlite3]
+    dbname = "pingcrm.db"
