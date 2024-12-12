@@ -30,15 +30,14 @@ func NewAuthMiddleware(i *inertia.Inertia) *AuthMiddleware {
 
 func (am AuthMiddleware) sharedPropMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		am.i.ShareProp("auth", AuthProp{
-				User: UserProp{
-					FirstName: "John",
-					LastName:  "Doe",
-					Account: AccountProp{
-						Name: "Acme Corporation",
-					},
+		inertia.SetProp(r.Context(), "auth", AuthProp{
+			User: UserProp{
+				FirstName: "John",
+				LastName:  "Doe",
+				Account: AccountProp{
+					Name: "Acme Corporation",
 				},
-			
+			},
 		})
 		next.ServeHTTP(w, r)
 	})
