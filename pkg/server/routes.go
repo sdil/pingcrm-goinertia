@@ -2,6 +2,7 @@ package server
 
 import (
 	"net/http"
+
 	"github.com/justinas/alice"
 
 	inertia "pingcrm/pkg/inertia"
@@ -20,12 +21,12 @@ func SetupRoutes(c *Container) *http.ServeMux {
 	ima := im.Append(am.sharedPropMiddleware)
 
 	// Dashboard
-	mux.Handle("/", im.Then(DashboardHandler(i)))
+	mux.Handle("/", ima.Then(DashboardHandler(i)))
 
 	// Auth
-	mux.Handle("GET /login", im.Then(LoginGetHandler(i)))
-	mux.Handle("POST /login", im.Then(LoginPostHandler(i)))
-	mux.Handle("DELETE /logout", im.Then(LogoutDeleteHandler(i)))
+	mux.Handle("GET /login", ima.Then(LoginGetHandler(i)))
+	mux.Handle("POST /login", ima.Then(LoginPostHandler(i)))
+	mux.Handle("DELETE /logout", ima.Then(LogoutDeleteHandler(i)))
 
 	// Organizations
 	oh := newOrganizationsHandler(c, i)

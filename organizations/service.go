@@ -29,7 +29,7 @@ func GetOrganizations(db *sql.DB) (models.OrganizationSlice, error) {
 
 func CreateOrganization(org models.Organization, db *sql.DB) (models.Organization, error) {
 	ctx := context.Background()
-	err := org.Insert(ctx, db, boil.Infer()) 
+	err := org.Insert(ctx, db, boil.Infer())
 	if err != nil {
 		return models.Organization{}, err
 	}

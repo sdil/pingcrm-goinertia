@@ -2,18 +2,18 @@ package server
 
 import (
 	"net/http"
+
 	inertia "github.com/romsar/gonertia"
 )
-
 
 type AccountProp struct {
 	Name string `json:"name"`
 }
 
 type UserProp struct {
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-	Account   AccountProp`json:"account"`
+	FirstName string      `json:"first_name"`
+	LastName  string      `json:"last_name"`
+	Account   AccountProp `json:"account"`
 }
 
 type AuthProp struct {
@@ -30,7 +30,7 @@ func NewAuthMiddleware(i *inertia.Inertia) *AuthMiddleware {
 
 func (am AuthMiddleware) sharedPropMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		inertia.SetProp(r.Context(), "auth", AuthProp{
+		auth := AuthProp{
 			User: UserProp{
 				FirstName: "John",
 				LastName:  "Doe",
@@ -38,7 +38,8 @@ func (am AuthMiddleware) sharedPropMiddleware(next http.Handler) http.Handler {
 					Name: "Acme Corporation",
 				},
 			},
-		})
-		next.ServeHTTP(w, r)
+		}
+		ctx := inertia.SetProp(r.Context(), "auth", auth)
+		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

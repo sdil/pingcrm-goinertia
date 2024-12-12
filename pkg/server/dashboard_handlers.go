@@ -2,8 +2,8 @@ package server
 
 import (
 	"net/http"
-	inertia "github.com/romsar/gonertia"
 
+	inertia "github.com/romsar/gonertia"
 )
 
 func DashboardHandler(i *inertia.Inertia) http.Handler {
